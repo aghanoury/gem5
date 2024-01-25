@@ -1,0 +1,8 @@
+Import('*')
+
+SimObject('ChLink.py', sim_objects=['ChLink'])
+
+Source('ch_link.cc')
+
+DebugFlag('ChLinkCpp', "debugging cpp")
+DebugFlag('ChLink', "For Learning gem5 Part 2.")
