@@ -515,6 +515,7 @@ def run(options, root, testsys, cpu_class):
                     j
                 ].vendor_string = options.override_vendor_string
 
+    # switching to a future class
     if cpu_class:
         switch_cpus = [
             cpu_class(switched_out=True, cpu_id=(i)) for i in range(np)
