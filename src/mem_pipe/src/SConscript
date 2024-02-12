@@ -1,0 +1,9 @@
+Import('*')
+
+SimObject('MemPipe.py', sim_objects=['MemPipe'])
+
+Source('mem_pipe.cc')
+
+DebugFlag('MemPipeCycles', "print debug statements at every cycle")
+DebugFlag('MemPipeCpp', "debugging cpp")
+DebugFlag('MemPipe', "debugging transactions")
