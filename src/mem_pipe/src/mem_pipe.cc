@@ -56,7 +56,7 @@ namespace gem5
     bool succ = sendTimingResp(pkt);
     if (succ)
     {
-      DPRINTF(MemPipe, "CPU ⬅️ MEM %s\n", pkt->print());
+      DPRINTF(MemPipe, "CPU <-- MEM %s, Addr: %#x\n", pkt->print(), pkt->getAddr());
     }
     return succ;
   }
@@ -86,7 +86,7 @@ namespace gem5
     bool succ = sendTimingReq(pkt);
     if (succ)
     {
-      DPRINTF(MemPipe, "CPU ➡ ️ MEM %s\n", pkt->print());
+      DPRINTF(MemPipe, "CPU --> ️ MEM %s, Addr: %#x\n", pkt->print(), pkt->getAddr());
     }
     return succ;
   }
@@ -129,5 +129,22 @@ namespace gem5
     DPRINTF(MemPipeCpp, "sendRangeChange\n");
     cpuPort.sendRangeChange();
   }
+
+  // atomics
+  Tick MemPipe::CPUSidePort::recvAtomic(PacketPtr pkt)
+  {
+    DPRINTF(MemPipeCpp, "recvAtomic\n");
+    Tick tick = owner->memPort.sendAtomic(pkt);
+    return tick;
+  }
+
+  // Tick MemPipe::MemSidePort::sendAtomic(Packet)
+
+  // atomics
+  // Tick recvAtomicBackdoor(PacketPtr pkt, MemBackdoorPtr &backdoor)
+  // {
+  //   DPRINTF(MemPipeCpp, "recvAtomicBackdoor\n");
+  //   return 0;
+  // }
 
 } // namespace gem5

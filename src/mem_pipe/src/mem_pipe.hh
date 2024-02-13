@@ -64,7 +64,7 @@ namespace gem5
        * Receive an atomic request packet from the request port.
        * No need to implement in this simple memobj.
        */
-      Tick recvAtomic(PacketPtr pkt) override { panic("recvAtomic unimpl."); }
+      Tick recvAtomic(PacketPtr pkt) override;
 
       /**
        * Receive a functional request packet from the request port.
