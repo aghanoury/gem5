@@ -56,7 +56,7 @@ namespace gem5
     bool succ = sendTimingResp(pkt);
     if (succ)
     {
-      DPRINTF(MemPipe, "CPU <-- MEM %s, Addr: %#x\n", pkt->print(), pkt->getAddr());
+      DPRINTF(MemPipe, "CPU <-- MEM %s\n", pkt->print());
     }
     return succ;
   }
@@ -86,7 +86,9 @@ namespace gem5
     bool succ = sendTimingReq(pkt);
     if (succ)
     {
-      DPRINTF(MemPipe, "CPU --> ️ MEM %s, Addr: %#x\n", pkt->print(), pkt->getAddr());
+      DPRINTF(MemPipe, "CPU --> ️ MEM %s\n", pkt->print());
+      // print packet size
+      // DPRINTF(MemPipe, pkt)
     }
     return succ;
   }
