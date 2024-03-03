@@ -18,9 +18,10 @@ namespace gem5
         mem_issue_latency(params.mem_issue_latency),
         read_issue_latency(params.read_issue_latency),
         write_issue_latency(params.write_issue_latency),
-        dram_avg_access_latency(params.dram_avg_access_latency),
+        // dram_avg_access_latency(params.dram_avg_access_latency),
+        responseQueue(params.response_queue_size),
         requestQueue(params.request_queue_size),
-        responseQueue(params.response_queue_size), stats(this)
+        stats(this)
   // requestQueue(params.queue_size),
   {
     cpuWaiting = false;
@@ -106,19 +107,6 @@ namespace gem5
     // logic for package trasmission should be minimal
     bool success = sendTimingResp(pkt);
     return success;
-    // DPRINTF(CounterCacheCpp, "sendPacket return code: %s\n", success);
-    // if (!success)
-    // {
-    //   blockedPacket = pkt;
-    //   owner->cpuWaiting = true;
-    //   DPRINTF(CounterCacheCpp, "setCpuWaiting\n");
-    // }
-    // else
-    // {
-    //   owner->cpuWaiting = false;
-    //   owner->memPort.sendRetryResp();
-    // }
-    // return success;
   }
 
   bool CounterCache::CPUSidePort::sendPacketQueue()
@@ -148,12 +136,6 @@ namespace gem5
     { // succesful send
       owner->responseQueue.pop();
       DPRINTF(CounterCacheCpp, "✅ CPU accepted packet %s\n", pkt->print());
-
-      // schedule a send of the next packet
-      // owner->schedule(new EventFunctionWrapper([this]
-      //                                          { sendPacketQueue(); },
-      //                                          name() + ".accessEvent", true),
-      //                 owner->clockEdge(static_cast<Cycles>(1)));
     }
     return succ;
   }
@@ -176,8 +158,6 @@ namespace gem5
     DPRINTF(CounterCacheCpp, "recvRespRetry\n");
     owner->pendingRequest = false;
     owner->cpuBlocked = false;
-    // owner->handleCpuRetry();
-    // sendPacketQueue(); // attempts to send the front packet of the queue
   }
 
   // PLAN TO DEPRECATE
@@ -226,14 +206,6 @@ namespace gem5
     { // succesful send
       owner->requestQueue.pop();
       DPRINTF(CounterCacheCpp, "✅ Memory accepted packet %s\n", pkt->print());
-
-      // schedule a send of the next packet
-      // owner->schedule(new EventFunctionWrapper([this]
-      //                                          { sendPacketQueue(); },
-      //                                          name() + ".accessEvent", true),
-      //                 owner->clockEdge(static_cast<Cycles>(1)));
-
-      // owner->handleCpuReqRetry();
     }
     return succ;
   }
@@ -249,9 +221,7 @@ namespace gem5
     DPRINTF(CounterCacheCpp, "recvReqRetry\n");
     owner->pendingResponse = false;
     owner->memBlocked = false;
-    // owner->handleMemRetry();
-    // We should have a blocked packet if this function is called.
-    // assert(blockedPacket != nullptr);
+
     sendPacketQueue();
   }
 
@@ -288,10 +258,7 @@ namespace gem5
   {
     DPRINTF(CounterCache, "%s for addr %#x\n", pkt->cmdString(), pkt->getAddr());
     DPRINTF(CounterCacheCpp, "handleRequest . pkt-type: %s for addr %#x\n", pkt->cmdString(), pkt->getAddr());
-    // DPRINTF(CounterCacheCpp, "Module State: %d\n", state);
-    // DPRINTF(CounterCacheCpp, "needsResponse: %d\n", pkt->needsResponse());
 
-    // bool succ = enqueueRequest(pkt);
     bool *b = new bool(false);
     std::tuple<PacketPtr, bool *> p = std::make_tuple(pkt, b);
     bool succ = requestQueue.push(p);
@@ -302,7 +269,6 @@ namespace gem5
     }
     else
     {
-      // assert(pendingRequest == false);
       pendingRequest = false; // by virtue of the queue having space
       DPRINTF(CounterCacheCpp, "enqueueRequest success\n");
       // add to the event queue to process a request from the queue
@@ -352,16 +318,8 @@ namespace gem5
     }
     else
     {
-      // assert(pendingResponse == false);
       pendingResponse = false; // by virtue of the queue having space
       DPRINTF(CounterCacheCpp, "enqueueResponse success\n");
-      // add to the event queue to process a response from the queue
-      // we don't need to delay the response packet so we add that call to the
-      // event queue with no additional delay
-      // schedule(new EventFunctionWrapper([this]
-      //                                   { cpuPort.sendPacketQueue(); },
-      //                                   name() + ".accessEvent", true),
-      //          curTick()); // TODO: update this hardcoded value to a param
     }
     return succ;
   }
@@ -403,9 +361,6 @@ namespace gem5
   {
     DPRINTF(CounterCacheCpp, "sendRangeChange\n");
     cpuPort.sendRangeChange();
-    // for (auto &port : cpuPorts) {
-    //   port.sendRangeChange();
-    // }
   }
   // atomics
   Tick CounterCache::CPUSidePort::recvAtomic(PacketPtr pkt)
@@ -420,6 +375,7 @@ namespace gem5
         ADD_STAT(readReqs, statistics::units::Count::get(), "Number of read requests"),
         ADD_STAT(writeReqs, statistics::units::Count::get(), "Number of write requests")
   {
+    // do nothing
   }
 
 } // namespace gem5

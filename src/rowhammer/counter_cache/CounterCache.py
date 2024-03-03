@@ -33,9 +33,9 @@ class CounterCache(ClockedObject):
 
     # sm_cache_hitrate = Param.Float(0.5, "Hitrate of the secure module cache")
 
-    dram_avg_access_latency = Param.Latency(
-        "Average access latency for the DRAM"
-    )
+    # dram_avg_access_latency = Param.Latency(
+    #     "Average access latency for the DRAM"
+    # )
 
     request_queue_size = Param.Unsigned(32, "Size of the request queue")
 

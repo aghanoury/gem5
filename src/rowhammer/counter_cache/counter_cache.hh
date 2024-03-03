@@ -219,7 +219,7 @@ namespace gem5
     // const Cycles write_calc_tags_cycles;
     // const Cycles key_tag_cache_access_latency;
     // const float sm_cache_hitrate;
-    const Tick dram_avg_access_latency;
+    // const Tick dram_avg_access_latency;
 
     /// True if this is currently blocked waiting for a response.
     bool cpuWaiting;

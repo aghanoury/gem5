@@ -185,11 +185,12 @@ spec_cmds = [
 
 # simulation parameters
 cwd = os.getcwd() + "/"
-gem5_bin = cwd + "build/X86/gem5.debug"
-project_dir = "mem_pipe"
-config_file = cwd + "configs/mem_pipe/se_deriv.py"
+# gem5_bin = cwd + "build/X86/gem5.debug"
+gem5_bin = cwd + "build/X86/gem5.fast"
+project_dir = "counter_cache"
+config_file = cwd + "configs/rowhammer/se_deriv.py"
 
-debug_flags = "MemPipe"
+debug_flags = ""
 
 # Create session and trace directories based on current date and time
 session_dir = (
@@ -203,8 +204,8 @@ os.makedirs(trace_dir, exist_ok=True)
 
 # static parameters
 # these are the params you want to keep constant accross each run. For example, "cache size" may be one paramter you want to keep constant accross all benchmarks
-fast_forward = 10000000
-maxinsts = 50000000
+fast_forward = 100000
+maxinsts = 500000
 redirect = args.redirect
 
 mem_issue_latency = 0
