@@ -5,7 +5,7 @@ from m5.SimObject import SimObject
 
 class ChLink(ClockedObject):
     type = "ChLink"
-    cxx_header = "rowhammer/src/ch_link.hh"
+    cxx_header = "rowhammer/chlink/ch_link.hh"
     cxx_class = "gem5::ChLink"
 
     cpu_side = ResponsePort("CPU side port, receives requests")

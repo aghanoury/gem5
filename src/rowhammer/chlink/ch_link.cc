@@ -1,4 +1,4 @@
-#include "rowhammer/src/ch_link.hh"
+#include "rowhammer/chlink/ch_link.hh"
 
 #include <iostream>
 
