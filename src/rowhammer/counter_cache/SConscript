@@ -1,0 +1,9 @@
+Import('*')
+
+SimObject('CounterCache.py', sim_objects=['CounterCache'])
+
+Source('counter_cache.cc')
+
+DebugFlag('CounterCacheCycles', "print debug statements at every cycle")
+DebugFlag('CounterCacheCpp', "debugging cpp")
+DebugFlag('CounterCache', "debugging transactions")
