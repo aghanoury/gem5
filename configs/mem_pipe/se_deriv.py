@@ -188,6 +188,7 @@ args.caches = True
 args.l1i_cache = "16KB"
 args.l1d_cache = "16KB"
 args.mem_size = "16GB"
+args.mem_pipe = True
 
 # --l1d_size L1D_SIZE] [--l1i_size L1I_SIZE
 
