@@ -1,9 +1,9 @@
 Import('*')
 
-SimObject('CounterCache.py', sim_objects=['CounterCache'])
+SimObject('RhSecureModule.py', sim_objects=['RhSecureModule'])
 
-Source('counter_cache.cc')
+Source('rh_secure_module.cc')
 
-DebugFlag('CounterCacheCycles', "print debug statements at every cycle")
-DebugFlag('CounterCacheCpp', "debugging cpp")
-DebugFlag('CounterCache', "debugging transactions")
+DebugFlag('RhSecureModuleCycles', "print debug statements at every cycle")
+DebugFlag('RhSecureModuleCpp', "debugging cpp")
+DebugFlag('RhSecureModule', "debugging transactions")

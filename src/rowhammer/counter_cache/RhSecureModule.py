@@ -3,10 +3,10 @@ from m5.params import *
 from m5.SimObject import SimObject
 
 
-class CounterCache(ClockedObject):
-    type = "CounterCache"
-    cxx_header = "rowhammer/counter_cache/counter_cache.hh"
-    cxx_class = "gem5::CounterCache"
+class RhSecureModule(ClockedObject):
+    type = "RhSecureModule"
+    cxx_header = "rowhammer/counter_cache/rh_secure_module.hh"
+    cxx_class = "gem5::RhSecureModule"
 
     cpu_side = ResponsePort("CPU side port, receives requests")
 

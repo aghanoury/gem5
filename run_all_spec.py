@@ -187,8 +187,8 @@ spec_cmds = [
 cwd = os.getcwd() + "/"
 # gem5_bin = cwd + "build/X86/gem5.debug"
 gem5_bin = cwd + "build/X86/gem5.fast"
-project_dir = "counter_cache"
-config_file = cwd + "configs/rowhammer/se_deriv.py"
+project_dir = "malware_detection"
+config_file = cwd + "configs/malware_detection/se_deriv.py"
 
 debug_flags = ""
 
@@ -204,18 +204,18 @@ os.makedirs(trace_dir, exist_ok=True)
 
 # static parameters
 # these are the params you want to keep constant accross each run. For example, "cache size" may be one paramter you want to keep constant accross all benchmarks
-fast_forward = 100000
-maxinsts = 500000
+fast_forward = 5000
+maxinsts = 25000
 redirect = args.redirect
-
-mem_issue_latency = 0
-read_issue_latency = 0
-write_issue_latency = 0
 
 # permutable paramters
 # these are the params you want to change accross each run. For example, "cache miss latency" may be one paramter you want to see given multiple benchmarks
 # set these as key value pairs
-permutable_params = {}
+permutable_params = {
+    "mem_issue_latency": [1],
+    "read_issue_latency": [1],
+    "write_issue_latency": [1],
+}
 all_permutations = [
     dict(zip(permutable_params.keys(), p))
     for p in product(*permutable_params.values())

@@ -1,15 +1,15 @@
-#ifndef __SECURE_MODULE_HH__
-#define __SECURE_MODULE_HH__
+#ifndef __RH_SECURE_MODULE_HH__
+#define __RH_SECURE_MODULE_HH__
 
 #include "mem/port.hh"
-#include "params/CounterCache.hh"
+#include "params/RhSecureModule.hh"
 #include "sim/clocked_object.hh"
 #include "rowhammer/counter_cache/hardware_queue.hh"
 
 namespace gem5
 {
 
-  class CounterCache : public ClockedObject
+  class RhSecureModule : public ClockedObject
   {
   private:
     // ports
@@ -17,7 +17,7 @@ namespace gem5
     {
     private:
       /// The object that owns this object (SimpleMemobj)
-      CounterCache *owner;
+      RhSecureModule *owner;
 
       /// True if the port needs to send a retry req.
       // with edits)
@@ -29,7 +29,7 @@ namespace gem5
       /**
        * Constructor. Just calls the superclass constructor.
        */
-      CPUSidePort(const std::string &name, CounterCache *owner)
+      CPUSidePort(const std::string &name, RhSecureModule *owner)
           : ResponsePort(name), owner(owner), needRetry(false),
             blockedPacket(nullptr) {}
 
@@ -89,7 +89,7 @@ namespace gem5
     {
     private:
       /// The object that owns this object (SimpleMemobj)
-      CounterCache *owner;
+      RhSecureModule *owner;
 
       /// If we tried to send a packet and it was blocked, store it here
       PacketPtr blockedPacket;
@@ -98,7 +98,7 @@ namespace gem5
       /**
        * Constructor. Just calls the superclass constructor.
        */
-      MemSidePort(const std::string &name, CounterCache *owner)
+      MemSidePort(const std::string &name, RhSecureModule *owner)
           : RequestPort(name), owner(owner), blockedPacket(nullptr) {}
 
       /**
@@ -143,7 +143,8 @@ namespace gem5
      * @return true if we can handle the request this cycle, false if the
      *         requestor needs to retry later
      */
-    bool handleRequest(PacketPtr pkt);
+    bool
+    handleRequest(PacketPtr pkt);
 
     /**
      * Handle the respone from the memory side
@@ -246,12 +247,12 @@ namespace gem5
     /// If we tried to send a packet and it was blocked, store it here
     // TODO: eventually turn this into a queue
     PacketPtr cpuWaitingPacket;
-    // Other CounterCache stuff
+    // Other RhSecureModule stuff
 
   protected:
-    struct CounterCacheStats : public statistics::Group
+    struct RhSecureModuleStats : public statistics::Group
     {
-      CounterCacheStats(statistics::Group *parent);
+      RhSecureModuleStats(statistics::Group *parent);
       statistics::Scalar readReqs;
       statistics::Scalar writeReqs;
       // statistics::Scalar hits;
@@ -261,7 +262,7 @@ namespace gem5
     } stats;
 
   public:
-    CounterCache(const CounterCacheParams &p);
+    RhSecureModule(const RhSecureModuleParams &p);
 
     void startup() override;
 
