@@ -185,12 +185,14 @@ spec_cmds = [
 
 # simulation parameters
 cwd = os.getcwd() + "/"
-# gem5_bin = cwd + "build/X86/gem5.debug"
-gem5_bin = cwd + "build/X86/gem5.fast"
+gem5_bin = cwd + "build/X86/gem5.debug"
+# gem5_bin = cwd + "build/X86/gem5.fast"
+# gem5_bin = cwd + "build/X86/gem5.opt"
 project_dir = "malware_detection"
+# project_dir = "rowhammer"
 config_file = cwd + "configs/malware_detection/se_deriv.py"
 
-debug_flags = ""
+debug_flags = ["SecureModuleCpp", "SecureModuleCycles"]
 
 # Create session and trace directories based on current date and time
 session_dir = (
@@ -204,17 +206,17 @@ os.makedirs(trace_dir, exist_ok=True)
 
 # static parameters
 # these are the params you want to keep constant accross each run. For example, "cache size" may be one paramter you want to keep constant accross all benchmarks
-fast_forward = 5000
-maxinsts = 25000
+fast_forward = 50000
+maxinsts = 2500000
 redirect = args.redirect
 
 # permutable paramters
 # these are the params you want to change accross each run. For example, "cache miss latency" may be one paramter you want to see given multiple benchmarks
 # set these as key value pairs
 permutable_params = {
-    "mem_issue_latency": [1],
-    "read_issue_latency": [1],
-    "write_issue_latency": [1],
+    # "mem_issue_latency": [0],
+    # "read_issue_latency": [54],
+    # "write_issue_latency": [33],
 }
 all_permutations = [
     dict(zip(permutable_params.keys(), p))
@@ -244,8 +246,8 @@ for c in spec_cmds:
         # cmd_str = f"(cd {path} && {gem5_bin} --debug-flags SecureModuleCpp --outdir={session_dir}/{benchmark}/ {config_file} --cmd {cmd} "
         # cmd_str = f"(cd {path} && {gem5_bin} --outdir={session_dir}/{benchmark}/ {config_file} --cmd {cmd} --mem_issue_latency {mem_issue_latency} --read_issue_latency {read_issue_latency} --write_issue_latency {write_issue_latency} "
         cmd_str = f"(cd {path} && {gem5_bin} --outdir={session_dir}/stats/{benchmark}_{i}/ "
-        if debug_flags:
-            cmd_str += f" --debug-flags {debug_flags} "
+        for d in debug_flags:
+            cmd_str += f" --debug-flags {d} "
         cmd_str += f" {config_file} --cmd {cmd} "
         cmd_str += sim_params
         cmd_str += ' --opts \\\\"{}\\\\"'.format(c.get("opts", ""))

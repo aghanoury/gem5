@@ -296,49 +296,33 @@ for i in range(args.num_cpus):
             iwalkcache = None
             dwalkcache = None
 
-        if args.memchecker:
-            dcache_mon = MemCheckerMonitor(warn_only=True)
-            dcache_real = dcache
-
-            # Do not pass the memchecker into the constructor of
-            # MemCheckerMonitor, as it would create a copy; we require
-            # exactly one MemChecker instance.
-            dcache_mon.memchecker = system.memchecker
-
-            # Connect monitor
-            dcache_mon.mem_side = dcache.cpu_side
-
-            # Let CPU connect to monitors
-            dcache = dcache_mon
-
         # When connecting the caches, the clock is also inherited
         # from the CPU in question
         system.cpu[i].addPrivateSplitL1Caches(
             icache, dcache, iwalkcache, dwalkcache
         )
 
-        if args.memchecker:
-            # The mem_side ports of the caches haven't been connected yet.
-            # Make sure connectAllPorts connects the right objects.
-            system.cpu[i].dcache = dcache_real
-            system.cpu[i].dcache_mon = dcache_mon
-
     system.cpu[i].createInterruptController()
-    # if args.l2cache:
-    #     system.cpu[i].connectAllPorts(
-    #         system.tol2bus.cpu_side_ports,
-    #         system.membus.cpu_side_ports,
-    #         system.membus.mem_side_ports,
-    #     )
+    if args.l2cache:
+        system.cpu[i].connectAllPorts(
+            system.tol2bus.cpu_side_ports,
+            system.membus.cpu_side_ports,
+            system.membus.mem_side_ports,
+        )
     # elif args.external_memory_system:
     #     system.cpu[i].connectUncachedPorts(
     #         system.membus.cpu_side_ports, system.membus.mem_side_ports
     #     )
     # elif args.mem_pipe:
-    system.counter_cache = CounterCache()
-    system.cpu[i].connectBus(system.membus)
-    system.membus.mem_side_ports = system.counter_cache.cpu_side
-    system.mem_ctrl.port = system.counter_cache.mem_side
+
+    # connect an L2 Cache
+    # syste.cpu
+    # system.cpu[i].connectBus(system.membus)
+
+
+system.counter_cache = CounterCache()
+system.membus.mem_side_ports = system.counter_cache.cpu_side
+system.mem_ctrl.port = system.counter_cache.mem_side
     # else:
     #     system.cpu[i].connectBus(system.membus)
     #     system.membus.mem_side_ports = system.mem_ctrl.port

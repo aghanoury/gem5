@@ -184,9 +184,12 @@ warn('Override "args.cpu_type" command line argument')
 warn("OTHER CLI ARGUMENTS ARE BEING OVERRIDDEN!")
 # args.cpu_type = "X86MinorCPU"
 args.cpu_type = "DerivO3CPU"
+args.sys_clock = "3.2GHz"
 args.caches = True
 args.l1i_cache = "16KB"
 args.l1d_cache = "16KB"
+args.l2cache = True
+args.l2_size = "8MB"
 args.mem_size = "16GB"
 args.mem_pipe = True
 
@@ -284,6 +287,14 @@ dcache_class, icache_class, l2_cache_class, walk_cache_class = (
     L2Cache,
     None,
 )
+if args.l2cache:
+        system.l2 = l2_cache_class(
+            clk_domain=system.cpu_clk_domain, **_get_cache_opts("l2", args)
+        )
+        system.tol2bus = L2XBar(clk_domain=system.cpu_clk_domain)
+        system.l2.cpu_side = system.tol2bus.mem_side_ports
+        system.l2.mem_side = system.membus.cpu_side_ports
+
 # Set the cache line size of the system
 system.cache_line_size = args.cacheline_size
 for i in range(args.num_cpus):
@@ -302,32 +313,11 @@ for i in range(args.num_cpus):
             iwalkcache = None
             dwalkcache = None
 
-        if args.memchecker:
-            dcache_mon = MemCheckerMonitor(warn_only=True)
-            dcache_real = dcache
-
-            # Do not pass the memchecker into the constructor of
-            # MemCheckerMonitor, as it would create a copy; we require
-            # exactly one MemChecker instance.
-            dcache_mon.memchecker = system.memchecker
-
-            # Connect monitor
-            dcache_mon.mem_side = dcache.cpu_side
-
-            # Let CPU connect to monitors
-            dcache = dcache_mon
-
         # When connecting the caches, the clock is also inherited
         # from the CPU in question
         system.cpu[i].addPrivateSplitL1Caches(
             icache, dcache, iwalkcache, dwalkcache
         )
-
-        if args.memchecker:
-            # The mem_side ports of the caches haven't been connected yet.
-            # Make sure connectAllPorts connects the right objects.
-            system.cpu[i].dcache = dcache_real
-            system.cpu[i].dcache_mon = dcache_mon
 
     system.cpu[i].createInterruptController()
     if args.l2cache:
@@ -336,18 +326,12 @@ for i in range(args.num_cpus):
             system.membus.cpu_side_ports,
             system.membus.mem_side_ports,
         )
-    elif args.external_memory_system:
-        system.cpu[i].connectUncachedPorts(
-            system.membus.cpu_side_ports, system.membus.mem_side_ports
-        )
-    elif args.mem_pipe:
-        system.mem_pipe = MemPipe()
-        system.cpu[i].connectBus(system.membus)
-        system.membus.mem_side_ports = system.mem_pipe.cpu_side
-        system.mem_ctrl.port = system.mem_pipe.mem_side
     else:
         system.cpu[i].connectBus(system.membus)
-        system.membus.mem_side_ports = system.mem_ctrl.port
+
+system.mem_pipe = MemPipe()
+system.membus.mem_side_ports = system.mem_pipe.cpu_side
+system.mem_ctrl.port = system.mem_pipe.mem_side
 
 ##### END CACHE CONFIG #####
 
