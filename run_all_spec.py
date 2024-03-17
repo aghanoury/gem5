@@ -192,7 +192,7 @@ project_dir = "malware_detection"
 # project_dir = "rowhammer"
 config_file = cwd + "configs/malware_detection/se_deriv.py"
 
-debug_flags = ["SecureModuleCpp", "SecureModuleCycles"]
+debug_flags = ["SecureModuleCpp"]
 
 # Create session and trace directories based on current date and time
 session_dir = (
@@ -206,7 +206,7 @@ os.makedirs(trace_dir, exist_ok=True)
 
 # static parameters
 # these are the params you want to keep constant accross each run. For example, "cache size" may be one paramter you want to keep constant accross all benchmarks
-fast_forward = 50000
+fast_forward = 500
 maxinsts = 2500000
 redirect = args.redirect
 
