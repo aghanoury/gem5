@@ -70,10 +70,10 @@ def get_processes(args):
     for wrkld in workloads:
         process = Process(pid=100 + idx)
         process.executable = wrkld
-        if args.cwd:
-            process.cwd = args.cwd
-        else:
-            process.cwd = os.getcwd()
+        # if args.cwd:
+        #     process.cwd = args.cwd
+        # else:
+        #     process.cwd = os.getcwd()
         process.gid = os.getgid()
 
         if args.env:
@@ -131,10 +131,6 @@ parser = argparse.ArgumentParser()
 Options.addCommonOptions(parser)
 Options.addSEOptions(parser)
 
-parser.add_argument(
-    "--cwd",
-    help="change the relative dir for the binary",
-)
 # --cmd already derrived from other args
 parser.add_argument(
     "--opts",
@@ -158,15 +154,38 @@ if args.cmd:
     # do this later if we need to do multi-workload shit.
     # multiprocesses, numThreads = get_processes(args)
 
-    p = Process(pid=100)
-    w = args.cmd.split(";")[0]
-    pargs = args.opts.strip("\\").split()
-    # inputs = args.input.replace('"','').split()
-    p.executable = w
-    p.cmd = [w] + pargs
-    # p.inputs = [inputs]
+    idx = 0
+    commands = args.cmd.split(";")
 
-    multiprocesses, numThreads = (p, 1)
+    if args.opts:
+        pargs = args.opts.split(";")
+    else:
+        pargs = (";" * (len(commands) - 1)).split(";")
+
+    if len(commands) != len(pargs):
+        print(f"len(commands) = {len(commands)}")
+        print(f"len(pargs) = {len(pargs)}")
+        fatal(
+            "mismatched cmd and argument string sizes! make sure there are an matching number of commands per set of args. if one of your commands requires no arguments, put a blank set with an extra semi-colon"
+        )
+    for command, parg in zip(commands, pargs):
+        p = Process(pid=100 + idx)
+        p.executable = command
+        p.cmd = [command] + [parg]
+        multiprocesses.append(p)
+        idx += 1
+
+    numThreads = len(commands)
+
+    # w = args.cmd.split(";")[0]
+    # pargs = args.opts.strip("\\").split()
+    # # inputs = args.input.replace('"','').split()
+    # p.executable = w
+    # p.cmd = [w] + pargs
+    # # p.inputs = [inputs]
+
+    # multiprocesses, numThreads = (p, 1)
+    # print("FUCK", multiprocesses, numThreads)
 else:
     print("No workload specified. Exiting!\n", file=sys.stderr)
     sys.exit(1)
@@ -182,8 +201,8 @@ depending on the options provided.
 """
 warn('Override "args.cpu_type" command line argument')
 warn("OTHER CLI ARGUMENTS ARE BEING OVERRIDDEN!")
-# args.cpu_type = "X86MinorCPU"
-args.cpu_type = "DerivO3CPU"
+args.cpu_type = "X86MinorCPU"
+# args.cpu_type = "DerivO3CPU"
 args.sys_clock = "3.2GHz"
 args.caches = True
 args.l1i_cache = "16KB"
@@ -288,12 +307,12 @@ dcache_class, icache_class, l2_cache_class, walk_cache_class = (
     None,
 )
 if args.l2cache:
-        system.l2 = l2_cache_class(
-            clk_domain=system.cpu_clk_domain, **_get_cache_opts("l2", args)
-        )
-        system.tol2bus = L2XBar(clk_domain=system.cpu_clk_domain)
-        system.l2.cpu_side = system.tol2bus.mem_side_ports
-        system.l2.mem_side = system.membus.cpu_side_ports
+    system.l2 = l2_cache_class(
+        clk_domain=system.cpu_clk_domain, **_get_cache_opts("l2", args)
+    )
+    system.tol2bus = L2XBar(clk_domain=system.cpu_clk_domain)
+    system.l2.cpu_side = system.tol2bus.mem_side_ports
+    system.l2.mem_side = system.membus.cpu_side_ports
 
 # Set the cache line size of the system
 system.cache_line_size = args.cacheline_size

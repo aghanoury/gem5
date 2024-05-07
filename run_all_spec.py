@@ -39,6 +39,7 @@ parser.add_argument(
 #     help="Name of the run to be used in the output directory",
 # )
 args = parser.parse_args()
+spec_path = "spec_bin/train"
 
 # Define SPEC benchmark commands
 spec_cmds = [
@@ -50,133 +51,133 @@ spec_cmds = [
     # TODO: Add comments for each benchmark explaining its purpose
     {
         "name": "perlbench_r",
-        "path": "spec_bin/500.perlbench_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/500.perlbench_r/run/run_base_train_main-m64.0000/",
         "bin": "perlbench_r_base.main-m64",
         "opts": "-I./lib splitmail.pl 535 13 25 24 1091 1",
     },
     {
         "name": "gcc_r",
-        "path": "spec_bin/502.gcc_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/502.gcc_r/run/run_base_train_main-m64.0000/",
         "bin": "cpugcc_r_base.main-m64",
         "opts": "train01.c -O3 -finline-limit=50000 -o train01.opts-O3_-finline-limit_50000.s",
     },
     # TODO: fix the handling of the input file for this benchmark
     # {
     #     "name": "bwaves_r",
-    #     "path": "spec_bin/503.bwaves_r/run/run_base_train_main-m64.0000/",
+    #     "path": f"{spec_path}/503.bwaves_r/run/run_base_train_main-m64.0000/",
     #     "bin": "bwaves_r_base.main-m64",
     #     "opts": "< bwaves_1.in",
     # },
     {
         "name": "mcf_r",
-        "path": "spec_bin/505.mcf_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/505.mcf_r/run/run_base_train_main-m64.0000/",
         "bin": "mcf_r_base.main-m64",
         "opts": "inp.in",
     },
     {
         "name": "cactuBSSN_r",
-        "path": "spec_bin/507.cactuBSSN_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/507.cactuBSSN_r/run/run_base_train_main-m64.0000/",
         "bin": "cactusBSSN_r_base.main-m64",
         "opts": "spec_train.par",
     },
     {
         "name": "namd_r",
-        "path": "spec_bin/508.namd_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/508.namd_r/run/run_base_train_main-m64.0000/",
         "bin": "namd_r_base.main-m64",
         "opts": "--input apoa1.input --iterations 7 --output apoa1.train.output",
     },
     {
         "name": "povray_r",
-        "path": "spec_bin/511.povray_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/511.povray_r/run/run_base_train_main-m64.0000/",
         "bin": "povray_r_base.main-m64",
         "opts": "SPEC-benchmark-train.ini",
     },
     {
         "name": "lbm_r",
-        "path": "spec_bin/519.lbm_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/519.lbm_r/run/run_base_train_main-m64.0000/",
         "bin": "lbm_r_base.main-m64",
         "opts": "300 reference.dat 0 1",
     },
     {
         "name": "omnetpp_r",
-        "path": "spec_bin/520.omnetpp_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/520.omnetpp_r/run/run_base_train_main-m64.0000/",
         "bin": "omnetpp_r_base.main-m64",
         "opts": "-c General -r 0",
     },
     {
         "name": "wrf_r",
-        "path": "spec_bin/521.wrf_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/521.wrf_r/run/run_base_train_main-m64.0000/",
         "bin": "wrf_r_base.main-m64",
         "opts": "namelist.input",
     },
     {
         "name": "xalancbmk_r",
-        "path": "spec_bin/523.xalancbmk_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/523.xalancbmk_r/run/run_base_train_main-m64.0000/",
         "bin": "cpuxalan_r_base.main-m64",
         "opts": "allbooks.xml xalanc.xsl",
     },
     {
         "name": "x264_r",
-        "path": "spec_bin/525.x264_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/525.x264_r/run/run_base_train_main-m64.0000/",
         "bin": "x264_r_base.main-m64",
         "opts": "--dumpyuv 50 --frames 142 -o BuckBunny_New.264 BuckBunny.yuv 1280x720",
     },
     {
         "name": "blender_r",
-        "path": "spec_bin/526.blender_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/526.blender_r/run/run_base_train_main-m64.0000/",
         "bin": "blender_r_base.main-m64",
         "opts": "sh5_reduced.blend --render-output sh5_reduced_ --threads 1 -b -F RAWTGA -s 234 -e 234 -a",
     },
     {
         "name": "cam4_r",
-        "path": "spec_bin/527.cam4_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/527.cam4_r/run/run_base_train_main-m64.0000/",
         "bin": "cam4_r_base.main-m64",
     },
     {
         "name": "deepsjeng_r",
-        "path": "spec_bin/531.deepsjeng_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/531.deepsjeng_r/run/run_base_train_main-m64.0000/",
         "bin": "deepsjeng_r_base.main-m64",
         "opts": "train.txt",
     },
     {
         "name": "imagick_r",
-        "path": "spec_bin/538.imagick_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/538.imagick_r/run/run_base_train_main-m64.0000/",
         "bin": "imagick_r_base.main-m64",
         "opts": "-limit disk 0 train_input.tga -resize 320x240 -shear 31 -edge 140 -negate -flop -resize 900x900 -edge 10 train_output.tga",
     },
     {
         "name": "leela_r",
-        "path": "spec_bin/541.leela_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/541.leela_r/run/run_base_train_main-m64.0000/",
         "bin": "leela_r_base.main-m64",
         "opts": "train.sgf",
     },
     {
         "name": "nab_r",
-        "path": "spec_bin/544.nab_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/544.nab_r/run/run_base_train_main-m64.0000/",
         "bin": "nab_r_base.main-m64",
         "opts": "gcn4dna 1850041461 300",
     },
     {
         "name": "exchange2_r",
-        "path": "spec_bin/548.exchange2_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/548.exchange2_r/run/run_base_train_main-m64.0000/",
         "bin": "exchange2_r_base.main-m64",
         "opts": "1",
     },
     {
         "name": "fotonik3d_r",
-        "path": "spec_bin/549.fotonik3d_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/549.fotonik3d_r/run/run_base_train_main-m64.0000/",
         "bin": "fotonik3d_r_base.main-m64",
     },
     # TODO: fix input
     # {
     #     "name": "roms_r",
-    #     "path": "spec_bin/554.roms_r/run/run_base_train_main-m64.0000/",
+    #     "path": f"{spec_path}/554.roms_r/run/run_base_train_main-m64.0000/",
     #     "bin": "roms_r_base.main-m64",
     #     "opts": "ocean_benchmark1.in.x",
     # },
     {
         "name": "xz_r",
-        "path": "spec_bin/557.xz_r/run/run_base_train_main-m64.0000/",
+        "path": f"{spec_path}/557.xz_r/run/run_base_train_main-m64.0000/",
         "bin": "xz_r_base.main-m64",
         "opts": "IMG_2560.cr2.xz 40 ec03e53b02deae89b6650f1de4bed76a012366fb3d4bdc791e8633d1a5964e03004523752ab008eff0d9e693689c53056533a05fc4b277f0086544c6c3cbbbf6 40822692 40824404 4",
     },
@@ -185,14 +186,15 @@ spec_cmds = [
 
 # simulation parameters
 cwd = os.getcwd() + "/"
-gem5_bin = cwd + "build/X86/gem5.debug"
-# gem5_bin = cwd + "build/X86/gem5.fast"
+# gem5_bin = cwd + "build/X86/gem5.debug"
+gem5_bin = cwd + "build/X86/gem5.fast"
 # gem5_bin = cwd + "build/X86/gem5.opt"
 project_dir = "malware_detection"
 # project_dir = "rowhammer"
 config_file = cwd + "configs/malware_detection/se_deriv.py"
 
-debug_flags = ["SecureModuleCpp"]
+# debug_flags = ["SecureModuleCpp"]
+debug_flags = []
 
 # Create session and trace directories based on current date and time
 session_dir = (
@@ -206,17 +208,17 @@ os.makedirs(trace_dir, exist_ok=True)
 
 # static parameters
 # these are the params you want to keep constant accross each run. For example, "cache size" may be one paramter you want to keep constant accross all benchmarks
-fast_forward = 500
-maxinsts = 2500000
+fast_forward = 10000000
+maxinsts = 250000000
 redirect = args.redirect
 
 # permutable paramters
 # these are the params you want to change accross each run. For example, "cache miss latency" may be one paramter you want to see given multiple benchmarks
 # set these as key value pairs
 permutable_params = {
-    # "mem_issue_latency": [0],
-    # "read_issue_latency": [54],
-    # "write_issue_latency": [33],
+    "mem_issue_latency": [0],
+    "read_issue_latency": [0],
+    "write_issue_latency": [0],
 }
 all_permutations = [
     dict(zip(permutable_params.keys(), p))
